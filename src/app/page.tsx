@@ -15,9 +15,11 @@ export default function Home() {
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    console.log("baseEndpoint", baseEndpoint);
-    axios.get(`${baseEndpoint}/users`).then((res) => setUsers(res.data));
+    axios.get(`${baseEndpoint}/users`).then((res) => {
+      setUsers(res.data.body); 
+    });
   }, []);
+
 
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },

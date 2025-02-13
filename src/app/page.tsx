@@ -4,7 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 const { Title } = Typography;
-const baseEndpoint = process.env.BASE_API;
+const baseEndpoint = process.env.NEXT_PUBLIC_BASEURL_API;
 interface User {
   id: number;
   name: string;

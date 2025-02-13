@@ -1,0 +1,35 @@
+@import url("https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --backgroundrgb: 0, 0, 0;
+  --font-family: "Prompt", sans-serif;
+  --ant-font-family: "Prompt", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --backgroundrgb: 0, 0, 0;
+    --font-family: "Prompt", sans-serif;
+    --ant-font-family: "Prompt", sans-serif;
+  }
+}
+
+html {
+  font-family: "Prompt", sans-serif;
+}
+
+body {
+  font-family: "Prompt", sans-serif;
+  color: rgb(var(--foreground-rgb));
+  background: #f6f6f6;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

@@ -1,36 +1,26 @@
 "use client";
-import { Table, Typography } from "antd";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { Layout, Button } from "antd";
+import { useRouter } from "next/router";
 
-const { Title } = Typography;
-const baseEndpoint = process.env.NEXT_PUBLIC_BASEURL_API;
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
+const { Header, Content } = Layout;
 
-export default function Home() {
-  const [users, setUsers] = useState<User[]>([]);
+export default function HomePage() {
+  const router = useRouter();
 
-  useEffect(() => {
-    axios.get(`${baseEndpoint}/users`).then((res) => {
-      setUsers(res.data.body); 
-    });
-  }, []);
-
-
-  const columns = [
-    { title: "ID", dataIndex: "id", key: "id" },
-    { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Email", dataIndex: "email", key: "email" },
-  ];
+  const navigateToUsers = () => {
+    router.push("/users");
+  };
 
   return (
-    <div style={{ padding: 20 }}>
-      <Title level={2}>User List</Title>
-      <Table dataSource={users} columns={columns} rowKey="id" />
-    </div>
+    <Layout>
+      <Header style={{ padding: 0, background: "#fff" }}>
+        <Button type="primary" onClick={navigateToUsers}>
+          Go to Users Page
+        </Button>
+      </Header>
+      <Content style={{ padding: "20px" }}>
+        <h2>Welcome to the Home Page!</h2>
+      </Content>
+    </Layout>
   );
 }

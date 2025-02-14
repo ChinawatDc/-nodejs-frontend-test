@@ -2,8 +2,8 @@
 import { UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Modal, Space, Table, Typography } from "antd";
 import axios from "axios";
+import moment from "moment";
 import { useEffect, useState } from "react";
-
 const { Title } = Typography;
 const baseEndpoint = process.env.NEXT_PUBLIC_BASEURL_API;
 
@@ -31,9 +31,21 @@ export default function UsersPage() {
   }, []);
 
   const columns = [
-    { title: "ID", dataIndex: "id", key: "id" },
-    { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Email", dataIndex: "email", key: "email" },
+    { title: "ลำดับ", dataIndex: "id", key: "id" },
+    { title: "ชื่อ", dataIndex: "name", key: "name" },
+    { title: "E-mail", dataIndex: "email", key: "email" },
+    {
+      title: "วันที่สร้าง",
+      dataIndex: "created_at",
+      key: "created_at",
+      render: (text: string) => moment(text).format("DD/MM/YYYY HH:mm"),
+    },
+    {
+      title: "วันที่แก้ไข",
+      dataIndex: "updated_at",
+      key: "updated_at",
+      render: (text: string) => moment(text).format("DD/MM/YYYY HH:mm"),
+    },
     {
       title: "Actions",
       key: "actions",
@@ -114,7 +126,7 @@ export default function UsersPage() {
 
   return (
     <div style={{ padding: 20 }}>
-      <Title level={2}>User List</Title>
+      <Title level={2}>รายการผู้ใช้</Title>
       <Button
         type="primary"
         onClick={() => setIsModalVisible(true)}

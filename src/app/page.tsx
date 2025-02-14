@@ -1,6 +1,6 @@
 "use client";
 import { Layout, Button } from "antd";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const { Header, Content } = Layout;
 
@@ -19,7 +19,7 @@ export default function HomePage() {
         </Button>
       </Header>
       <Content style={{ padding: "20px" }}>
-        <h2>Welcome to the Home Page!</h2>
+        <h2>Welcome to the DEV Page!</h2>
       </Content>
     </Layout>
   );

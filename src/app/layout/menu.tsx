@@ -3,6 +3,7 @@ import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown, Menu, MenuProps, Space } from "antd";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { removePairTokens } from "../libs/token";
 
 // เมนูหลัก
 const menuItems = [
@@ -20,7 +21,6 @@ export default function AppMenu() {
     position: "",
   });
 
-  // ดึงข้อมูลจาก localStorage เมื่อ component โหลด
   useEffect(() => {
     const storedUser = localStorage.getItem("user_data");
     if (storedUser) {
@@ -64,7 +64,8 @@ export default function AppMenu() {
       label: "ออกจากระบบ",
       icon: <LogoutOutlined />,
       onClick: () => {
-        localStorage.removeItem("user_data"); // ลบข้อมูลออก
+        localStorage.removeItem("user_data");
+        removePairTokens();
         router.push("/login");
       },
     },

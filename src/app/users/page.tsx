@@ -51,8 +51,8 @@ export default function UsersPage() {
       key: "actions",
       render: (_: undefined, user: User) => (
         <Space>
-          <Button onClick={() => handleEdit(user)}>Edit</Button>
-          <Button danger onClick={() => handleDelete(user.id)}>
+          <Button onClick={() => onEdit(user)}>Edit</Button>
+          <Button danger onClick={() => onDelete(user.id)}>
             Delete
           </Button>
         </Space>
@@ -60,7 +60,7 @@ export default function UsersPage() {
     },
   ];
 
-  const handleCreate = async (values: UserFormValues) => {
+  const onCreate = async (values: UserFormValues) => {
     try {
       const { name, email } = values;
       const response = await axios.post(`${baseEndpoint}/users`, {
@@ -74,13 +74,13 @@ export default function UsersPage() {
     }
   };
 
-  const handleEdit = (user: User) => {
+  const onEdit = (user: User) => {
     setEditingUser(user);
     form.setFieldsValue(user);
     setIsModalVisible(true);
   };
 
-  const handleUpdate = async (values: UserFormValues) => {
+  const onUpdate = async (values: UserFormValues) => {
     if (!editingUser) return;
 
     try {
@@ -101,7 +101,7 @@ export default function UsersPage() {
     }
   };
 
-  const handleDelete = async (userId: number) => {
+  const onDelete = async (userId: number) => {
     try {
       await axios.delete(`${baseEndpoint}/users/${userId}`);
       setUsers(users.filter((user) => user.id !== userId));
@@ -110,13 +110,13 @@ export default function UsersPage() {
     }
   };
 
-  const handleCancel = () => {
+  const onCancel = () => {
     setIsModalVisible(false);
     setEditingUser(null);
   };
 
   const modalFooter = [
-    <Button key="cancel" onClick={handleCancel}>
+    <Button key="cancel" onClick={onCancel}>
       Cancel
     </Button>,
     <Button key="submit" type="primary" onClick={() => form.submit()}>
@@ -126,7 +126,7 @@ export default function UsersPage() {
 
   return (
     <div style={{ padding: 20 }}>
-      <Title level={2}>รายการผู้ใช้</Title>
+      <Title level={2}>ผู้ใช้งาน</Title>
       <Button
         type="primary"
         onClick={() => setIsModalVisible(true)}
@@ -137,13 +137,13 @@ export default function UsersPage() {
       <Table dataSource={users} columns={columns} rowKey="id" />
       <Modal
         title={editingUser ? "Edit User" : "Create User"}
-        visible={isModalVisible}
-        onCancel={handleCancel}
+        open={isModalVisible}
+        onCancel={onCancel}
         footer={modalFooter}
       >
         <Form
           form={form}
-          onFinish={editingUser ? handleUpdate : handleCreate}
+          onFinish={editingUser ? onUpdate : onCreate}
           initialValues={editingUser || { name: "", email: "" }}
         >
           <Form.Item

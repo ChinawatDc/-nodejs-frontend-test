@@ -24,11 +24,20 @@ export default function UsersPage() {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [form] = Form.useForm();
 
-  // ดึงข้อมูล user จาก localStorage
-  const storedUser = localStorage.getItem("user_data");
-  const userData = storedUser ? JSON.parse(storedUser) : null;
-  const isAdmin = userData?.email === "chinawat.dc@gmail.com"; // ตรวจสอบสิทธิ์ Admin
+  const [isAdmin, setIsAdmin] = useState(false);
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user_data");
+    if (storedUser) {
+      try {
+        const userData = JSON.parse(storedUser);
+        const admin = userData?.email === "chinawat.dc@gmail.com";
+        setIsAdmin(admin);
+      } catch (error) {
+        console.error("Error parsing user data from localStorage", error);
+      }
+    }
+  }, []);
   useEffect(() => {
     axios.get(`${baseEndpoint}/users`).then((res) => {
       setUsers(res.data.body);

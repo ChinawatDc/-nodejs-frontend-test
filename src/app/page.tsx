@@ -8,6 +8,7 @@ const { Title, Text } = Typography;
 
 export default function HomePage() {
   const [currentDate, setCurrentDate] = useState("");
+
   useEffect(() => {
     const updateDate = () => {
       const yearBE = moment().year() + 543;
@@ -27,7 +28,8 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
-      <Card className="w-full max-w-lg text-center shadow-lg bg-white rounded-xl">
+      {/* Card ต้อนรับ */}
+      <Card className="w-full max-w-lg text-center shadow-lg bg-white rounded-xl mb-6">
         <Title level={2} className="text-gray-800">
           ยินดีตอนรับเข้าสู่เว็บทดสอบ !
         </Title>
@@ -37,7 +39,8 @@ export default function HomePage() {
         </div>
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+      {/* Grid Features */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-3xl">
         {features.map((feature, index) => (
           <a key={index} href={feature.link} className="block">
             <Card

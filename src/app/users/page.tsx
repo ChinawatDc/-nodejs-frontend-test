@@ -3,7 +3,7 @@ import { UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Modal, Space, Table, Typography } from "antd";
 import axios from "axios";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 const { Title } = Typography;
 const baseEndpoint = process.env.NEXT_PUBLIC_BASEURL_API;
 
@@ -23,6 +23,11 @@ export default function UsersPage() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [form] = Form.useForm();
+
+  // ดึงข้อมูล user จาก localStorage
+  const storedUser = localStorage.getItem("user_data");
+  const userData = storedUser ? JSON.parse(storedUser) : null;
+  const isAdmin = userData?.email === "chinawat.dc@gmail.com"; // ตรวจสอบสิทธิ์ Admin
 
   useEffect(() => {
     axios.get(`${baseEndpoint}/users`).then((res) => {
@@ -51,14 +56,18 @@ export default function UsersPage() {
       key: "actions",
       render: (_: undefined, user: User) => (
         <Space>
-          <Button onClick={() => onEdit(user)}>Edit</Button>
-          <Button danger onClick={() => onDelete(user.id)}>
-            Delete
-          </Button>
+          {isAdmin && (
+            <React.Fragment>
+              <Button onClick={() => onEdit(user)}>Edit</Button>
+              <Button danger onClick={() => onDelete(user.id)}>
+                Delete
+              </Button>
+            </React.Fragment>
+          )}
         </Space>
       ),
     },
-  ];
+  ].filter(Boolean); // ลบค่า `undefined` ถ้าไม่ใช่ admin
 
   const onCreate = async (values: UserFormValues) => {
     try {
@@ -127,13 +136,15 @@ export default function UsersPage() {
   return (
     <div style={{ padding: 20 }}>
       <Title level={2}>ผู้ใช้งาน</Title>
-      <Button
-        type="primary"
-        onClick={() => setIsModalVisible(true)}
-        style={{ marginBottom: 16 }}
-      >
-        Add User
-      </Button>
+      {isAdmin && (
+        <Button
+          type="primary"
+          onClick={() => setIsModalVisible(true)}
+          style={{ marginBottom: 16 }}
+        >
+          Add User
+        </Button>
+      )}
       <Table dataSource={users} columns={columns} rowKey="id" />
       <Modal
         title={editingUser ? "Edit User" : "Create User"}
@@ -144,7 +155,7 @@ export default function UsersPage() {
         <Form
           form={form}
           onFinish={editingUser ? onUpdate : onCreate}
-          initialValues={editingUser || { name: "", email: "" }}
+          initialValues={{ name: "", email: "" }}
         >
           <Form.Item
             label="Name"

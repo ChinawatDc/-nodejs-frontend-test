@@ -15,22 +15,18 @@ export default function LoginPage() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
   const router = useRouter();
 
-  // จัดการการเปลี่ยนแปลงค่าใน input field
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
-  // ส่งข้อมูลไปที่ API
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
-      const endpoint = isSignUp ? "/auth/signup" : "/auth/login";
+      const endpoint = isSignUp ? "/auth/register" : "/auth/login";
       const response = await axios.post(`${baseEndpoint}${endpoint}`, formData);
 
       if (response.data.access_token && response.data.refresh_token) {
@@ -49,15 +45,23 @@ export default function LoginPage() {
       } else {
         throw new Error("Invalid response from server");
       }
-    } catch (err: unknown) {
-      if (axios.isAxiosError(err)) {
-        setError(err.response?.data?.message || "Something went wrong");
-      } else {
-        setError("An unexpected error occurred");
-      }
+    } catch (err) {
+      setError(
+        axios.isAxiosError(err)
+          ? err.response?.data?.message || "Something went wrong"
+          : "An unexpected error occurred"
+      );
     } finally {
       setLoading(false);
     }
+  };
+
+  const toggleSignUp = () => {
+    setIsSignUp((prev) => {
+      const newState = !prev;
+      setFormData({ name: "", email: "", password: "" }); // รีเซ็ตค่า formData
+      return newState;
+    });
   };
 
   return (
@@ -68,7 +72,7 @@ export default function LoginPage() {
             type="checkbox"
             className="login-toggle"
             checked={isSignUp}
-            onChange={() => setIsSignUp(!isSignUp)}
+            onChange={toggleSignUp}
           />
           <span className="login-slider"></span>
           <span className="login-card-side"></span>

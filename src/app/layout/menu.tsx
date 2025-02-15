@@ -1,6 +1,6 @@
 "use client";
 import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Dropdown, MenuProps, Space } from "antd";
+import { Avatar, Dropdown, Menu, MenuProps, Space } from "antd";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 

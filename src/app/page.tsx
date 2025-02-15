@@ -1,12 +1,24 @@
 "use client";
 import { Card, Typography } from "antd";
 import moment from "moment";
+import { useEffect, useState } from "react";
 import { FaCalendarAlt, FaCog, FaUser } from "react-icons/fa";
 
 const { Title, Text } = Typography;
 
 export default function HomePage() {
-  const currentDate = moment().format("dddd, DD MMMM YYYY");
+  const [currentDate, setCurrentDate] = useState("");
+  useEffect(() => {
+    const updateDate = () => {
+      const yearBE = moment().year() + 543;
+      setCurrentDate(moment().format(`dddd, DD MMMM ${yearBE} HH:mm:ss`));
+    };
+
+    updateDate();
+    const interval = setInterval(updateDate, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const features = [
     { title: "ผู้ใช้งาน", icon: <FaUser size={24} />, link: "/users" },

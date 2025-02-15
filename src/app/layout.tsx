@@ -1,29 +1,29 @@
 "use client";
-import { Prompt } from "next/font/google";
+
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import "../styles/globals.css";
 import AppMenu from "./layout/menu";
 
-const prompt = Prompt({
-  weight: ["300", "400", "500", "700"],
-  subsets: ["latin"],
-  display: "swap",
-});
+const ignorePaths = ["/auth", "/login", "/bypass"];
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
+  const pathname = usePathname();
+  const router = useRouter();
+
   useEffect(() => {
     document.title = "Test Dev";
-  }, []);
+    const accessToken = localStorage.getItem("access_token");
+    if (!accessToken && pathname !== "/login") {
+      router.push("/login");
+    }
+  }, [pathname, router]);
 
-  //
   return (
     <html lang="en">
-      <body className={`${prompt.className} antialiased`}>
-        <AppMenu />
+      <body className="antialiased">
+        {!ignorePaths.includes(pathname) && <AppMenu />}
         {children}
       </body>
     </html>
